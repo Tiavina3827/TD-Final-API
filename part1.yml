@@ -1,0 +1,285 @@
+openapi: 3.0.0
+info:
+  title: Football League Manage API
+  description: |
+    This API allow to manage football leagues, teams, and players. Users can make new leagues, teams, and players, and also get information about them. The API also supports linking teams to specific leagues and assigning players to teams.
+  version: 1.0.0
+servers:
+  - url: https://api.sportsmanagementsystem.io/v1
+    description: API's Main Server
+
+paths:
+  /leagues:
+    get:
+      summary: Fetches all leagues
+      description: It gets a list of all available leagues with optional filtering by name and location.
+      parameters:
+        - name: name
+          in: query
+          description: Filter leagues by its name.
+          required: false
+          schema:
+            type: string
+        - name: location
+          in: query
+          description: Filter leagues by where they are held.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Specify the result's page number to retrieve.
+          required: true
+          schema:
+            type: int
+        - name: pageSize
+          in: query
+          description: The amount of results per page.
+          required: true
+          schema:
+            type: int
+      responses:
+        '200':
+          description: The list of leagues paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leagues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/League'
+                  total:
+                    type: int
+                  page:
+                    type: int
+                  pageSize:
+                    type: int
+        '400':
+          description: Bad request because of wrong parameters
+        '500':
+          description: Intern server error
+
+    post:
+      summary: Create a new league
+      description: Adds a new league by providing its name and where it takes place.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueCreate'
+      responses:
+        '201':
+          description: League created successfully
+        '400':
+          description: Wrong data input
+        '500':
+          description: Intern server error
+
+  /clubs:
+    get:
+      summary: Get all teams
+      description: Get a paginated list of all teams, with optional filtering by their name.
+      parameters:
+        - name: name
+          in: query
+          description: Filter teams by its name.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: The current page number to retrieve.
+          required: true
+          schema:
+            type: int
+        - name: pageSize
+          in: query
+          description: The number of results for each page.
+          required: true
+          schema:
+            type: int
+      responses:
+        '200':
+          description: The list of teams paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  teams:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Team'
+                  total:
+                    type: int
+                  page:
+                    type: int
+                  pageSize:
+                    type: int
+        '400':
+          description: Bad request due to invalid parameters
+        '500':
+          description: Intern server error
+
+    post:
+      summary: Register a new team
+      description: Add a new team by specifying their name and slogan.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamCreate'
+      responses:
+        '201':
+          description: Team created successfully
+        '400':
+          description: Wrong data input
+        '500':
+          description: Intern server error
+
+  /players:
+    post:
+      summary: Add a new player
+      description: Register a new player by specifying their name, number, and preferred foot.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerCreate'
+      responses:
+        '201':
+          description: Player successfully created
+        '400':
+          description: Wrong data input
+        '500':
+          description: Intern server error
+
+    get:
+      summary: Fetch players by team
+      description: Retrieve a list of players linked to a specific team, with optional filtering by their name.
+      parameters:
+        - name: teamId
+          in: query
+          description: Filter players by the team ID.
+          required: true
+          schema:
+            type: string
+        - name: playerName
+          in: query
+          description: Filter players by name.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Specify which page of results to retrieve.
+          required: true
+          schema:
+            type: int
+        - name: pageSize
+          in: query
+          description: The amount of results per page.
+          required: true
+          schema:
+            type: int
+      responses:
+        '200':
+          description: The list of players paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  players:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Player'
+                  total:
+                    type: int
+                  page:
+                    type: int
+                  pageSize:
+                    type: int
+        '400':
+          description: Wrong parameters
+        '500':
+          description: Intern server error
+
+components:
+  schemas:
+    League:
+      type: object
+      properties:
+        name:
+          type: string
+          example: EPL
+        location:
+          type: string
+          example: England
+        id:
+          type: string
+
+    LeagueCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        location:
+          type: string
+
+    Team:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Chelsea
+        slogan:
+          type: string
+          example: "The Blues!"
+        leagues:
+          type: array
+          items:
+            $ref: '#/components/schemas/League'
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/Player'
+
+    TeamCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        slogan:
+          type: string
+
+    Player:
+      type: object
+      properties:
+        name:
+          type: string
+          example: N'Golo Kante
+        number:
+          type: integer
+          example: 7
+        foot:
+          type: string
+          enum: [Left, Right]
+          example: Right
+
+    PlayerCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        number:
+          type: int
+        foot:
+          type: string
+          enum: [Left, Right]
+git add 
