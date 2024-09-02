@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Football League Manage API
   description: |
-    This API allow to manage football leagues, teams, and players. Users can make new leagues, teams, and players, and also get information about them. The API also supports linking teams to specific leagues and assigning players to teams.
+    This API allows managing football leagues, teams, and players. Users can create new leagues, teams, and players, and also retrieve information about them. The API also supports linking teams to specific leagues and assigning players to teams.
   version: 1.0.0
 servers:
   - url: https://api.sportsmanagementsystem.io/v1
@@ -12,17 +12,17 @@ paths:
   /leagues:
     get:
       summary: Fetches all leagues
-      description: It gets a list of all available leagues with optional filtering by name and location.
+      description: It retrieves a list of all available leagues with optional filtering by name and location.
       parameters:
         - name: name
           in: query
-          description: Filter leagues by its name.
+          description: Filter leagues by name.
           required: false
           schema:
             type: string
         - name: location
           in: query
-          description: Filter leagues by where they are held.
+          description: Filter leagues by location.
           required: false
           schema:
             type: string
@@ -34,7 +34,7 @@ paths:
             type: int
         - name: pageSize
           in: query
-          description: The amount of results per page.
+          description: The number of results per page.
           required: true
           schema:
             type: int
@@ -57,13 +57,13 @@ paths:
                   pageSize:
                     type: int
         '400':
-          description: Bad request because of wrong parameters
+          description: Bad request due to incorrect parameters
         '500':
-          description: Intern server error
+          description: Internal server error
 
     post:
       summary: Create a new league
-      description: Adds a new league by providing its name and where it takes place.
+      description: Adds a new league by providing its name and location.
       requestBody:
         required: true
         content:
@@ -74,18 +74,18 @@ paths:
         '201':
           description: League created successfully
         '400':
-          description: Wrong data input
+          description: Invalid data input
         '500':
-          description: Intern server error
+          description: Internal server error
 
   /clubs:
     get:
       summary: Get all teams
-      description: Get a paginated list of all teams, with optional filtering by their name.
+      description: Retrieves a paginated list of all teams, with optional filtering by name.
       parameters:
         - name: name
           in: query
-          description: Filter teams by its name.
+          description: Filter teams by name.
           required: false
           schema:
             type: string
@@ -97,7 +97,7 @@ paths:
             type: int
         - name: pageSize
           in: query
-          description: The number of results for each page.
+          description: The number of results per page.
           required: true
           schema:
             type: int
@@ -122,11 +122,11 @@ paths:
         '400':
           description: Bad request due to invalid parameters
         '500':
-          description: Intern server error
+          description: Internal server error
 
     post:
       summary: Register a new team
-      description: Add a new team by specifying their name and slogan.
+      description: Adds a new team by specifying its name and slogan.
       requestBody:
         required: true
         content:
@@ -137,14 +137,14 @@ paths:
         '201':
           description: Team created successfully
         '400':
-          description: Wrong data input
+          description: Invalid data input
         '500':
-          description: Intern server error
+          description: Internal server error
 
   /players:
     post:
       summary: Add a new player
-      description: Register a new player by specifying their name, number, and preferred foot.
+      description: Registers a new player by specifying their name, number, and preferred foot.
       requestBody:
         required: true
         content:
@@ -155,13 +155,13 @@ paths:
         '201':
           description: Player successfully created
         '400':
-          description: Wrong data input
+          description: Invalid data input
         '500':
-          description: Intern server error
+          description: Internal server error
 
     get:
       summary: Fetch players by team
-      description: Retrieve a list of players linked to a specific team, with optional filtering by their name.
+      description: Retrieves a list of players linked to a specific team, with optional filtering by name.
       parameters:
         - name: teamId
           in: query
@@ -183,7 +183,7 @@ paths:
             type: int
         - name: pageSize
           in: query
-          description: The amount of results per page.
+          description: The number of results per page.
           required: true
           schema:
             type: int
@@ -206,9 +206,9 @@ paths:
                   pageSize:
                     type: int
         '400':
-          description: Wrong parameters
+          description: Invalid parameters
         '500':
-          description: Intern server error
+          description: Internal server error
 
 components:
   schemas:
@@ -282,4 +282,3 @@ components:
         foot:
           type: string
           enum: [Left, Right]
-git add 
